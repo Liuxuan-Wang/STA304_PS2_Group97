@@ -1,0 +1,381 @@
+---
+title: "Canadian Federal Election Vote Intention Study"
+author: "(Group 97) Dingyi Yu, Linzi Guan, Liuxuan Wang"
+date: "10/08/2020"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library('tidyverse')
+```
+## Abstract
+
+   In this analysis of overall Canada Federal Election, as a Canadian polling company working for our client, Conservative Party of Canada, we have designed a survey with seven questions and simple randomly select the sample to get the information on different people’s voting intentions. The simulated assumptions and results are mainly based on statistics from 2016 Census and 2019 Canada Federal Election Vote results. From our analysis, we can conclude that though faintly behind of Liberal Party, elder people, male citizens, high-income citizens as well as people from western provinces are more likely to vote for Conservative Party of Canada.
+
+
+## Introduction
+    
+   Voting intention poll is commonly used, for both the governing and opposition parties, as a tool to generate an overview of the support among people. The Conservative Party of Canada, as the Official Opposition, remains as the most influential party besides the Liberal Party of Canada. Hence, in order to provide our client, **the Conservative Party of Canada**, with a clear picture on the proportion and characteristics of their supporters versus the supporters of Liberal Party of Canada in the **overall federal election**, we conduct monthly polling updates to visualize the trend and attempt to understand the voters’ concerns.
+   
+   Usually, people would like to vote for the party based on their own interests, which vary widely and are closely dependent on different factors. Instead of conducting a survey that simply states the question *“ What Party Are You Voting For”*, we collected information including the respondents’ **gender, age, education background , income, province/territory location and voting intention** to construct a general profile of both the supporters and non-supporters for our clients to find out the characteristics of their supporters and make potentially adjustment to meet the needs of non-supporters. More detailed information regarding the survey is included in the next section.
+
+
+## Survey Methodology
+
+   The survey was generated from the SurveyMonkey platform and was conducted from October 1st to October 7th.  We have **randomly selected** email addresses from the registered email list of Canadian Revenue Account(CRA) **without replacement** and sent our survey. Since all Canadian residents are expected to register their own Canadian Revenue Account, ideally we are able to cover our target population which includes all Canadian citizens who are 18 years old or older across the country. 
+   
+   The survey consists of six questions, including five questions collecting information about the respondent’s gender, age, education background, income, province/territory and the voting intention, and one question at the beginning as a filter to ask if the respondent is a Canadian citizen. All questions are in the form of multiple choices for the convenience of the survey taker, and 
+
+   **To deal with the non-response issue**, we kept randomly selecting email addresses from the list and sent out our survey until we got 1000 valid responses as our sample. Note that a valid response must be from a Canadian citizen with voting right, not including permanent residents or international residents holding visas. By doing so, the cost of the survey would inevitably increase as we need to send more emails than expected to handle the non-response issue. As a motivation to take a survey, we also provide an opportunity for the respondents to win a $100 coupon, which should also be included when doing the cost estimation. 
+   
+   *The estimated cost* in total is estimated to be $11,098 (USD), including the following criteria:
+
+1) SurveyMonkey cost: $7,140
+
+2) Coupon prize: $100 Starbucks email gift card (randomly select one respondent with completed answer)
+
+3) Human resources: $3,858 for 2 people, one week
+	
+   Our company values the **information privacy** and takes it seriously. Respondent’s information would be hidden when randomly selecting email addresses from the list. Our question design does not include information that can be used to track to any particular person or group of people. For personal information such as age or income, we set the answer format as a range rather than a specific value to make sure the respondent feels comfortable to answer. The survey result will not be linked to the respondent’s email or any other personal information that can be used to identify the respondent, and there will be a message in the email to inform the respondents that their responses will be used for analysis by taking the survey.
+
+
+## Simulation process and our assumptions:
+
+   After designing our survey, we started our simulation process on a sample size of 1500 responses in relation to simple random sampling email addresses of those who have the voting right from the registered email list of CRA without replacement and randomly selecting 1500 responses. 
+   
+   The simulation was conducted in two parts: one for the overall characteristics of our survey respondents, including gender, age, education background, income, province and voting intention; and the other for further locating the voting intention of the Liberal Party, the Conservative Party and other parties in the context of those characteristic groups. 
+   
+   As our target population includes all Canadian citizens no younger than 18 years old across the country, some researches were done on the true population to make the simulation more representative of the possible responses and several assumptions were made in the process accordingly.
+  
+   First of all, we assumed the non response rate to be 10% for all the questions in the survey. Hence, the sample size of the responses that counts in our simulation was 1350. 
+   
+   In terms of the broad view of the characteristics of our respondents, we referred to the 2016 Census Profile of Canada and filtered to find the related statistics on the aspects of gender, age, education background, income, and province of Canadian citizens no younger than 18 years old. The census suggests the number of females to the number of males is 51 to 49(out of 100) of the selected people so we made the assumption that our responses would show a female to male ratio of 51:49 and simulated accordingly. In similar rationale, we segmented age into four age levels including "18-29", "30-44", "45-59", and "60 and over", the education background into three education levels including "high school or less", "college"  and "university" and the personal income into four income levels including "under $30,000", "$30,000 to $59,999", "$60,000 to $89,999", "$90,000 and over". According to the proportion each group takes up in the census, we simulated in our sample for the overall characteristics of our potential responses. 
+   
+   To locate the voting intention of the Liberal Party, the Conservative Party and other parties in the context of those characteristic groups, we did further research and analysis. We retrieved the data of the voting results for each group of age, gender and education level from *(Abacus Data: Liberals up by 11 as Conservatives stuck below 30%)* . Similarly, we got the data for the voting results in different provinces from  *(Duffin, 2019)* and of different income levels from *(Cheung, 2019)* . We approximated the voting results as the voting intentions and simulated the voting intentions according to the percentages of voting results in each segmented group. 
+   
+   The results of our simulation are discussed in the following part. 
+
+
+## Simulation Results:
+
+```{r, echo = FALSE, include =TRUE}
+# Simulation of Raw data of which party people have voted. There are 10%, 135 non-response answers.
+N_raw = 1500
+set.seed(1699)
+raw_vote_groups <- c("Liberal", "Conservative", "Others", "Non-response")
+Raw_Vote_Group <- sample(raw_vote_groups, N_raw, replace = TRUE, prob = c(0.36, 0.26, 0.28, 0.10))
+```
+
+```{r, echo = FALSE, include = TRUE}
+Raw_Vote_df <-data.frame (Party = Raw_Vote_Group)
+order_raw_vote <- factor(Raw_Vote_df$Party, levels = c('Conservative','Liberal','Others', 'Non-response'))
+ggplot(Raw_Vote_df, aes(x = order_raw_vote, fill = Party)) + geom_bar() + scale_fill_brewer(palette="Spectral") + theme_light() + labs(x = "Party", y = "Count",
+        title ="Figure 1: Raw response on voting intention",
+        subtitle = "with non-response",
+        caption = "abacusdata: Liberals up by 11 as Conservatives stuck below 30%")
+```
+   
+   Figure 1 shows a big picture about the proportion of voters in our survey result. Note that since Conservative Party and Liberal Party remain two dominated parties in federal elections, we use others to represent other minority parties in order to focus on the comparison between the two major ones. The graph demonstrates an idea that among the 1500 samples we generate, approximately 35% of the respondents will vote for Liberal Party while 25% of the respondents support Conservative Party. Note that the proportion of Conservative Party and all other parties supporters are almost neck to neck.  Despite the fact that Liberal Party is remarkably ahead of Conservative Party in our sample, there is still around 10% of non-response cases. 
+   
+   
+   To focus on the features of Conservative Party and Liberal Party supporters in detail, we filtered out people who do not know which party they are voting for. Our sample size is thus reduced from 1500 to 1350. 
+
+```{r, echo = FALSE, include =TRUE}
+# After dropping all the non-response answers, we only look at the samples with response of party chosen in the following simulations. The left number of data will be 1350.
+N = 1350
+set.seed(1666)
+vote_groups <- c("Liberal", "Conservative", "Others")
+Vote_Group <- sample(vote_groups, N, replace = TRUE, prob = c(0.40, 0.29, 0.31))
+```
+
+```{r, echo = FALSE, include = TRUE}
+# Vote_df <-data.frame (Party = Vote_Group)
+# ggplot(Vote_df, aes(x = Party, fill = Party)) + geom_bar() + scale_fill_brewer(palette="Spectral") + theme_light()+labs(x = "Party", y = "Count",
+       # title ="Figure 2: Response on voting intention",
+        # subtitle = "without non-response",
+        # caption = "abacusdata: Liberals up by 11 as Conservatives stuck below 30%")
+```
+
+```{r, echo = FALSE, include =FALSE}
+
+
+# Simulation of gender property
+set.seed(1602)
+gender_groups <- c("Female", "Male")
+Gender_Group <- sample(gender_groups, N, replace = TRUE, prob = c(0.51,0.49))
+```
+
+
+```{r, echo = FALSE, include =TRUE}
+# Simulation of Age
+set.seed(2720)
+age_groups <- c("18-29", "30-44", "45-59", "60 and over")
+Age_Group <- sample(age_groups, N, replace = TRUE, prob = c(0.22, 0.23, 0.26, 0.29))
+
+```
+
+```{r, echo = FALSE, include =TRUE}
+# Simulation of Education level
+set.seed(7753)
+edu_groups <- c("high school or less", "college", "university")
+Edu_Group <- sample(edu_groups, N, replace = TRUE, prob = c(0.46, 0.22, 0.32))
+
+```
+
+
+```{r, echo = FALSE, include =TRUE}
+# Simulation of Yearly Income
+set.seed(1234)
+inc_groups <- c("under $30,000", "$30,000 to $59,999", "$60,000 to $89,999", "$90,000 and over" )
+Inc_Group <- sample(inc_groups, N, replace = TRUE, prob = c(0.45, 0.3, 0.14, 0.11))
+```
+
+
+```{r, echo = FALSE, include =TRUE}
+# Simulation of Province
+set.seed(5678)
+province_groups <- c("NL","PEI","NS","NB","QUE","ON","MAN","SASK","ALTA","BC","YT","NWT","NVT")
+
+Province_Group <- sample(province_groups, N, replace = TRUE, prob = c(0.015, 0.004, 0.026, 0.021, 0.232, 0.383, 0.036, 0.031, 0.116, 0.132, 0.001, 0.001, 0.001))
+```
+
+
+
+
+
+
+```{r,echo = FALSE, include =TRUE}
+df <- data.frame(Gender = Gender_Group,Age = Age_Group,Education = Edu_Group,Income = Inc_Group,Province = Province_Group)
+```
+
+```{r, echo = FALSE, include =TRUE}
+set.seed(1357)
+df$Vote_age <- NA
+teen <- nrow(df[df$Age=="18-29",])
+df[df$Age == "18-29", "Vote_age"]<- sample(vote_groups, teen, prob = c(0.42, 0.18, 0.4), replace = TRUE)
+ 
+
+young <- nrow(df[df$Age=="30-44",])
+df[df$Age == "30-44", "Vote_age"] <- sample(vote_groups, young, prob = c(0.38, 0.26, 0.36), replace = TRUE)
+
+
+medium <- nrow(df[df$Age=="45-59",])
+df[df$Age == "45-59", "Vote_age"] <- sample(vote_groups, medium, prob = c(0.39, 0.33, 0.28), replace = TRUE)
+
+
+old <- nrow(df[df$Age=="60 and over",])
+df[df$Age == "60 and over", "Vote_age"] <- sample(vote_groups, old, prob = c(0.39, 0.35, 0.26), replace = TRUE)
+
+```
+
+
+
+
+   Figure 2 and 3 below respectively show the age and gender distribution of the supporters for different parties. We could see that Liberal Party is ahead of Conservative Party in all age ranges. However, the gap becomes narrower as the age grows. For people younger than 30 years old, Liberal Party achieves 28% ahead, whereas the gap reduces to 10% when we see elderly over 60 years old. However, the proportion of people who vote Liberal Party does not have a significant decline as the age grows. Interestingly, people tend to transfer from other minority parties rather than Liberal to Conservative as the age grows. On the other hand , gender does not seem to make a significant difference among the supporters for both parties. Generally, Conservatives have more male supporters than female supporters. Of all 1350 respondent results, 24% of the female and 30% of the male would support Conservatives Party.
+
+
+```{r, echo = FALSE, include =TRUE}
+age_vote <- table(Age = df$Age, Party = df$Vote_age)
+age_vote_fre <- as.data.frame(round(prop.table(age_vote,1),2))
+```
+
+
+```{r,echo = FALSE, include =TRUE}
+ggplot(age_vote_fre, aes(x = Age, y = Freq, fill = Party))+geom_bar(position = "fill", stat = "identity") + scale_fill_brewer(palette = "Blues") + geom_text(aes(label = stat(y)), stat = 'identity', size = 3.5, color = 'black', position = position_stack(vjust = 0.5)) + theme_light() +labs(x = "Age", y = "Frequency",
+        title ="Figure 2: Voting intention for different age ranges",
+        subtitle = "Elder citizen like Conservative party more",
+        caption = "abacusdata: Liberals up by 11 as Conservatives stuck below 30%")
+```
+```{r,echo = FALSE, include =TRUE}
+set.seed(2468)
+df$Vote_gender <- NA
+female <- nrow(df[df$Gender=="Female",])
+df[df$Gender == "Female", "Vote_gender"]<- sample(vote_groups, female, prob = c(0.41, 0.26, 0.33), replace = TRUE)
+ 
+male <- nrow(df[df$Gender=="Male",])
+df[df$Gender == "Male", "Vote_gender"] <- sample(vote_groups, male, prob = c(0.38, 0.32, 0.3), replace = TRUE)
+
+```
+
+```{r, echo = FALSE, include =TRUE}
+gender_vote <- table(Gender = df$Gender, Party = df$Vote_gender)
+gender_vote_fre <- as.data.frame(round(prop.table(gender_vote,1),2))
+ggplot(gender_vote_fre, aes(x = Gender, y = Freq, fill = Party))+geom_bar(position = "fill", stat = "identity") + scale_fill_brewer(palette = "Blues") + geom_text(aes(label = stat(y)), stat = 'identity', size = 3.5, color = 'black', position = position_stack(vjust = 0.5)) + theme_light() +labs(x = "Gender", y = "Frequency",
+        title ="Figure 3: Voting intention for different genders",
+        subtitle = "Male citizen tend to choose Conservative Party",
+        caption = "abacusdata: Liberals up by 11 as Conservatives stuck below 30%")
+```
+
+
+   Figure 4 and 5 below respectively show the education background and income level distribution of the supporters for different parties. We could see that Conservative Party is more popular among people who have a college education background. Interestingly, the proportion of supporters for Conservative Party is the same for people who are with a high school or less background and with a university background. Thus we do not reject the hypothesis that the education background does not necessarily play a remarkable role when describing the characteristics of Conservative Party supporters.
+   
+   On the other hand, income level seems to be a more distinctive category between the two major parties. For voters with a higher income range(over $90,000/year), they tend to favor the Conservative Party with a 9% ahead compared with the Liberal Party. 
+
+```{r, echo = FALSE, include =TRUE}
+set.seed(1111)
+df$Vote_edu <- NA
+HS <- nrow(df[df$Education=="high school or less",])
+df[df$Education == "high school or less", "Vote_edu"]<- sample(vote_groups, HS, prob = c(0.37, 0.26, 0.37), replace = TRUE)
+ 
+College <- nrow(df[df$Education=="college",])
+df[df$Education == "college", "Vote_edu"] <- sample(vote_groups, College, prob = c(0.37, 0.31, 0.32), replace = TRUE)
+
+university <- nrow(df[df$Education=="university",])
+df[df$Education == "university", "Vote_edu"] <- sample(vote_groups, university, prob = c(0.45, 0.30, 0.25), replace = TRUE)
+
+```
+
+```{r, echo = FALSE, include =TRUE}
+edu_vote <- table(Education = df$Education, Party = df$Vote_edu)
+edu_vote_fre <- as.data.frame(round(prop.table(edu_vote,1),2))
+order_edu <- factor(edu_vote_fre$Education, levels = c('high school or less','college','university'))
+ggplot(edu_vote_fre, aes(x = order_edu, y = Freq, fill = Party))+geom_bar(position = "fill", stat = "identity") + scale_fill_brewer(palette = "Blues") + geom_text(aes(label = stat(y)), stat = 'identity', size = 3.5, color = 'black', position = position_stack(vjust = 0.5)) + theme_light()+labs(x = "Education level", y = "Frequency",
+        title ="Figure 4: Voting intention for different education levels",
+        subtitle = "College graduates tend to vote for Conservative",
+        caption = "abacusdata: Liberals up by 11 as Conservatives stuck below 30%")
+```
+
+
+```{r,echo = FALSE, include =TRUE}
+set.seed(6666)
+df$Vote_income <- NA
+low_income <- nrow(df[df$Income=="under $30,000",])
+df[df$Income == "under $30,000", "Vote_income"]<- sample(vote_groups, low_income, prob = c(0.55, 0.25, 0.2), replace = TRUE)
+ 
+med_income_1 <- nrow(df[df$Income=="$30,000 to $59,999",])
+df[df$Income == "$30,000 to $59,999", "Vote_income"] <- sample(vote_groups, med_income_1, prob = c(0.5, 0.3, 0.2), replace = TRUE)
+
+med_income_2 <- nrow(df[df$Income=="$60,000 to $89,999",])
+df[df$Income == "$60,000 to $89,999", "Vote_income"] <- sample(vote_groups, med_income_2, prob = c(0.45, 0.35, 0.2), replace = TRUE)
+
+high_income <- nrow(df[df$Income=="$90,000 and over",])
+df[df$Income == "$90,000 and over", "Vote_income"] <- sample(vote_groups, high_income, prob = c(0.4, 0.4, 0.2), replace = TRUE)
+```
+
+
+```{r, echo = FALSE, include =TRUE}
+income_vote <- table(Income = df$Income, Party = df$Vote_income)
+income_vote_fre <- as.data.frame(round(prop.table(income_vote,1),2))
+order_income <- factor(income_vote_fre$Income, levels = c('under $30,000','$30,000 to $59,999','$60,000 to $89,999','$90,000 and over'))
+ggplot(income_vote_fre, aes(x = order_income, y = Freq, fill = Party))+geom_bar(position = "fill", stat = "identity") + scale_fill_brewer(palette = "Blues") + geom_text(aes(label = stat(y)), stat = 'identity', size = 3.5, color = 'black', position = position_stack(vjust = 0.5))+ theme_light() + theme(axis.text.x = element_text(angle = -20)) +labs(x = "Income level", y = "Frequency",
+        title ="Figure 5: Voting intention for different income levels",
+        subtitle = "Rich people tend to support Conservative more",
+        caption = "The Tyee: Ten Demographic Clues to How Your Riding Might Vote Monday")
+```
+
+
+   Figure 6 below shows the provincial/territorial demographic distribution of the supporters for different parties, which is the most interesting part in our result. The provincial trend for supporters is remarkable and the Liberal do not show an dominated power anymore. Note that even though the Conservative Party loses support in all three territories, which seems to be an unreliable bias caused by the small sample size in these areas. Apart from the three territories,  Conservative Party enjoys overwhelming favors in certain provinces such as Alberta and Saskatchewan. Also in British Columbia, Manitoba and New Brunswick, Conservative Party is ahead of Liberal Party much as well. However, in some eastern provinces such as Ontario, Quebec and Newfoundland, Conservative Party does not have any superiority. 
+
+
+```{r, echo = FALSE, include =TRUE}
+set.seed(29999)
+df$Vote_province <- NA
+ALTA <- nrow(df[df$Province =="ALTA",])
+df[df$Province == "ALTA", "Vote_province"]<- sample(vote_groups, ALTA, prob = c(0.137, 0.692,0.171), replace = TRUE)
+ 
+BC <- nrow(df[df$Province =="BC",])
+df[df$Province == "BC", "Vote_province"]<- sample(vote_groups, BC, prob = c(0.261, 0.341, 0.398), replace = TRUE)
+
+MAN <- nrow(df[df$Province =="MAN",])
+df[df$Province == "MAN", "Vote_province"]<- sample(vote_groups, MAN, prob = c(0.263, 0.454, 0.283), replace = TRUE)
+
+NB <- nrow(df[df$Province =="NB",])
+df[df$Province == "NB", "Vote_province"]<- sample(vote_groups, NB, prob = c(0.376, 0.328, 0.296), replace = TRUE)
+
+NL <- nrow(df[df$Province =="NL",])
+df[df$Province == "NL", "Vote_province"]<- sample(vote_groups, NL, prob = c(0.447, 0.28, 0.273), replace = TRUE)
+
+NWT <- nrow(df[df$Province =="NWT",])
+df[df$Province == "NWT", "Vote_province"]<- sample(vote_groups, NWT, prob = c(0.40, 0.258, 0.342), replace = TRUE)
+
+NS <- nrow(df[df$Province =="NS",])
+df[df$Province == "NS", "Vote_province"]<- sample(vote_groups, NS, prob = c(0.413, 0.257, 0.33), replace = TRUE)
+
+NVT <- nrow(df[df$Province =="NVT",])
+df[df$Province == "NVT", "Vote_province"]<- sample(vote_groups, NVT, prob = c(0.31, 0.258, 0.432), replace = TRUE)
+
+ON <- nrow(df[df$Province =="ON",])
+df[df$Province == "ON", "Vote_province"]<- sample(vote_groups, ON, prob = c(0.415, 0.332, 0.253), replace = TRUE)
+
+PEI <- nrow(df[df$Province =="PEI",])
+df[df$Province == "PEI", "Vote_province"]<- sample(vote_groups, PEI, prob = c(0.436, 0.274, 0.29), replace = TRUE)
+
+QUE <- nrow(df[df$Province =="QUE",])
+df[df$Province == "QUE", "Vote_province"]<- sample(vote_groups, QUE, prob = c(0.342, 0.16, 0.498), replace = TRUE)
+
+SASK <- nrow(df[df$Province =="SASK",])
+df[df$Province == "SASK", "Vote_province"]<- sample(vote_groups, SASK, prob = c(0.116, 0.643, 0.241), replace = TRUE)
+
+YT <- nrow(df[df$Province =="YT",])
+df[df$Province == "YT", "Vote_province"]<- sample(vote_groups, YT, prob = c(0.334, 0.331, 0.117), replace = TRUE)
+```
+
+```{r,echo = FALSE, include =TRUE}
+province_vote <- table(Province = df$Province, Party = df$Vote_province)
+province_vote_fre <- as.data.frame(round(prop.table(province_vote,1),2))
+ggplot(province_vote_fre, aes(x = Province, y = Freq, fill = Party))+geom_bar(position = "fill", stat = "identity") + scale_fill_brewer(palette = "Blues") + geom_text(aes(label = stat(y)), stat = 'identity', size = 3, color = 'black', position = position_stack(vjust = 0.5))+ theme_light() +labs(x = "Province", y = "Frequency",
+        title ="Figure 6: Voting intention for different provinces",
+        caption = "statista: preliminary share of the popular vote per party by province")
+```
+
+## Discussion
+
+To summarize, we have certain findings in our result:
+
+1. The Liberal Party is approximately 10% ahead of the Conservative Party.
+
+2. Elder people favor the Conservative Party more than young people, but the 
+Conservative Party falls behind in all age ranges.
+
+3. The voting behaviors for male and female are similar, and male citizens tend to favor Conservatives Party compared to female citizens.
+
+4. Education background does not seem to make significant differences for voting behaviors, but for people with a college background, supporters of both Parties are almost neck to neck.
+
+5. People with higher income tend to vote for the Conservative Party, and that might be due to the policies enacted by the Conservatives tend to have lower tax for rich people.
+
+6. Voters in western provinces tend to favor Conservative Party more than eastern provinces.
+
+
+## Limitation
+
+In this part, several limitations regarding the survey and the simulation process would be discussed, which might create some bias, influence the validity of our survey and make the simulation results not representative for the true potential responses.
+
+1. We intended to randomly select email addresses from the registered email list of CRA without replacement and send our survey. However, this might not be realistic and applicable, as we may not get access to the email list of CRA because of privacy and legacy issues.
+
+2. Also, imperfect coverage error might exist if we approximate the registered Canadian citizens who are 18 years old or more as our target population. As we could not exclude the probabilities that some people with voting rights in Canada do not register with CRA and some people might not handle CRA accounts on their own so there might be undercoverage errors. 
+
+3. There might be some non-response problems. For example, if non-response takes up a large proportion of our responses, when analysing the responses, we might find a voting trend that might be away from the true voting intention. 
+
+4. As we have not held the possible lurking variables constant, those confounding variables might influence the voting intentions.
+
+
+## Next Steps
+
+Next steps would be discussed and suggested on two perspectives, one to provide suggestions for our client, the Conservative Party as a junior statistician at Petit Poll and the other to improve our survey and try to solve the problems that might exist. 
+
+### Suggestions for the Conservative Party
+   
+According to the results of our survey and the discussions above, our future work is to suggest the Conservative Party promote certain policies to target certain characteristic groups in which the voting rate for the Conservative Party lags behind. For example, our results suggest that although the Conservative Party falls behind in all age ranges, elder people favor the Conservative Party more than young people. Hence, this supports us to provide advice for the Conservative Party that they should come up with some policies benefiting the young people to gain more votes from them. Therefore, for next steps, we would analyse the survey results further and offer more suggestions for the Conservative.  
+
+### Potential future improvements of our survey
+	
+Other than getting an email list from the CRA, we need to think of some more realistic and applicable ways to reach our target population. Besides offering a $100 gift card for one randomly selected respondent, we can do more research on effective ways to promote responses and apply them to our survey to decrease the probability of non response. Also, we can control for more potential lurking variables in our analysis and decrease their impacts on our results. 
+
+
+## References
+
+Abacus Data: Liberals up by 11 as Conservatives stuck below 30%. Abacus Data Inc. https://abacusdata.ca/canadian-politics-poll-vote-june-2020-abacus-data/.
+
+Cheung, C. (2019, October 18). Ten Demographic Clues to How Your Riding Might Vote Monday. The Tyee. https://thetyee.ca/Analysis/2019/10/18/Demographic-Data-Riding-Vote-Election/.
+
+Duffin, E. (2019, October 22). Canadian election 2019: preliminary results share of popular vote per party by province 2019. Statista. https://www.statista.com/statistics/1062264/canada-election-share-of-popular-vote-per-party-by-province/.
+
+Government of Canada, S. C. (2019, June 18). Census Profile, 2016 Census Canada [Country] and Canada [Country]. Census Profile, 2016 Census - Canada [Country] and Canada [Country]. https://www12.statcan.gc.ca/census-recensement/2016/dp-pd/prof/details/Page.cfm?Lang=E.
+
+U.S. News & World Report. How Much Can a Statistician Expect to Get Paid? U.S. News & World Report. https://money.usnews.com/careers/best-jobs/statistician/salary.
+
+What's the average survey response rate? [2019 benchmark]. (2019, August 8). https://surveyanyplace.com/average-survey-response-rate/. 
+
+https://www.surveymonkey.com/r/HYC7ZNB (survey example link)
+
