@@ -373,9 +373,31 @@ Duffin, E. (2019, October 22). Canadian election 2019: preliminary results share
 
 Government of Canada, S. C. (2019, June 18). Census Profile, 2016 Census Canada [Country] and Canada [Country]. Census Profile, 2016 Census - Canada [Country] and Canada [Country]. https://www12.statcan.gc.ca/census-recensement/2016/dp-pd/prof/details/Page.cfm?Lang=E.
 
+R Core Team, (2020). R Foundation for Statistical Computing. R: A Language and Environment for Statistical Computing. https://www.R-project.org/
+
 U.S. News & World Report. How Much Can a Statistician Expect to Get Paid? U.S. News & World Report. https://money.usnews.com/careers/best-jobs/statistician/salary.
+
 
 What's the average survey response rate? [2019 benchmark]. (2019, August 8). https://surveyanyplace.com/average-survey-response-rate/. 
 
+Wickham et al., (2019). Welcome to the tidyverse. Journal of Open Source Software, 4(43), 1686, https://doi.org/10.21105/joss.01686
+
+## Appendix
+
 https://www.surveymonkey.com/r/HYC7ZNB (survey example link)
+
+### Screenshots of survey questions:
+
+![Caption for the picture](Survey(1).PNG)
+![Caption for the picture](Survey 2.PNG)
+![Caption for the picture](Survey 3.PNG)
+![Caption for the picture](Survey 5.PNG)
+![Caption for the picture](Survey 6.PNG)
+![Caption for the picture](Survey 7.PNG)
+![Caption for the picture](Survey 9.PNG)
+![Caption for the picture](Survey 10.PNG)
+
+### Survey monkey cost estimation:
+
+![Screen shot of cost estimation from survey monkey](Survey monkey cost.png)
 
